@@ -2,9 +2,59 @@
 {
     internal class Program
     {
+        //System Data 
+
+        List<string> passengerNames = new List<string>(){"Ali", "salwa", "khalfan", "Balqees"," Hussain" };
+        List<string> ticketNumbers= new List<string>() {"TKT001", "TKT002", "TKT003", "TKT004"," TKT005" };
+        string[] flightNumbers = new string[]
+           { " OA101 ", "OA106 ", "OA103", "OA108", "OA109", " OA102"};
 
 
-       
+        List<DateTime> availableDates = new List<DateTime> {
+
+
+            DateTime.Parse("10-6-2026"),
+            DateTime.Parse("14-6-2026"),
+            DateTime.Parse("21-6-2026"),
+            DateTime.Parse("27-6-2026")
+        };
+
+        Dictionary<string, string> bookingRecord = new Dictionary<string,string>()
+                {
+                { "  TKT001 "  ,"OA101|12-Jan-2026"},
+                { "  TKT002 " , "OA101|12-Jan-2026"},
+                { "  TKT003  " , "OA101|12-Jan-2026"},
+
+
+            };
+
+        Queue<string> checkedInQueue = new Queue<string>(
+            new string[]
+            {" Ali", 
+                "salwa",
+                "khalfan"
+            }
+
+            );
+
+
+        Stack<string> boardingStack = new Stack<string >(
+
+              new string[]
+            {   " Ali",
+                "salwa",
+                "khalfan"
+            }
+
+            );
+
+        List<string> cancelledTickets = new List<string>();
+
+
+        Dictionary<string,string> passengerSeatMap=new Dictionary<string,string>();
+
+
+        Queue< string> waitlistQueue=new Queue< string>();
 
 
 
@@ -12,7 +62,12 @@
 
 
 
-static void Main(string[] args)
+
+
+
+
+
+    static void Main(string[] args)
         {
 
 
@@ -96,9 +151,6 @@ static void Main(string[] args)
 
 
                     case 0:
-
-                        Console.WriteLine("0.EXIT");
-
                         exit = true;
 
                         break;
