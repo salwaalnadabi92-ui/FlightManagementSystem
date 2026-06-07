@@ -1,4 +1,6 @@
 ﻿using Microsoft.Win32;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design;
 using System.Security.Cryptography;
 
 namespace MiniFlightManagementSystem
@@ -9,7 +11,7 @@ namespace MiniFlightManagementSystem
 
         static  List<string> passengerNames = new List<string>(){"Ali", "salwa", "khalfan", "Balqees"," Hussain" };
         static  List<string> ticketNumbers= new List<string>() {"TKT001", "TKT002", "TKT003", "TKT004"," TKT005" };
-                 string[] flightNumbers = new string[]
+              static   string[] flightNumbers = new string[]
                 { " OA101 ", "OA106 ", "OA103", "OA108", "OA109", " OA102"};
 
 
@@ -24,10 +26,10 @@ namespace MiniFlightManagementSystem
 
         static  Dictionary<string, string> bookingRecord = new Dictionary<string,string>()
                 {
-                { "  TKT001 "  ,"OA101|12-Jan-2026"},
-                { "  TKT002 " , "OA101|12-Jan-2026"},
-                { "  TKT003  " , "OA101|12-Jan-2026"},
-
+                { "  TKT001 "  ,"OA101|10-Jan-2026"},
+                { "  TKT002 " , "OA106|14-Jan-2026"},
+                { "  TKT003  " , "OA103|21-Jan-2026"},
+                 { "  TKT003  " , "OA108|27-Jan-2026"},
 
             };
 
@@ -41,7 +43,7 @@ namespace MiniFlightManagementSystem
             );
 
 
-        Stack<string> boardingStack = new Stack<string >(
+        static Stack<string> boardingStack = new Stack<string >(
 
               new string[]
             {   " Ali",
@@ -127,14 +129,55 @@ namespace MiniFlightManagementSystem
           
             }
 
-
+            //Display the total passenger count 
             Console.WriteLine(passengerNames.Count);
-
-
-
             }
 
-            static void Main(string[] args)
+        //case 3 : Book a Flight Ticket
+
+        public static void BookFlightTicket()
+        {
+           // Validate it exists in ticketNumbers and is not in cancelledTickets
+
+            Console.WriteLine("Enter ticket Id:  ");
+            string ticketID=Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticketID) || cancelledTickets.Contains(ticketID))
+            {
+                Console.WriteLine(" invalid ticket id ");
+                return;
+            }
+            
+     
+
+            //Check if the ticket is already in bookingRecord
+
+            if(bookingRecord.ContainsKey(ticketID))
+            {
+                Console.WriteLine(" This ticket already has a booking");
+                return;
+            }
+
+            //Display all available flight numbers from the flightNumbers 
+            Console.WriteLine(" Available flights");
+
+
+            for (int i = 0; i <flightNumbers.Length; i++)
+
+            
+                Console.WriteLine((i+1) +  " :"+flightNumbers[i]);
+            
+            
+
+
+            //select a flight by entering its index number. Validate the input is within range
+
+
+
+
+        }
+
+        static void Main(string[] args)
         {
 
 
@@ -178,7 +221,7 @@ namespace MiniFlightManagementSystem
 
                     case 3:
 
-
+                        BookFlightTicket();
                         break;
 
                     case 4:
