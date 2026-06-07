@@ -1,16 +1,19 @@
-﻿namespace MiniFlightManagementSystem
+﻿using Microsoft.Win32;
+using System.Security.Cryptography;
+
+namespace MiniFlightManagementSystem
 {
     internal class Program
     {
         //System Data 
 
-        List<string> passengerNames = new List<string>(){"Ali", "salwa", "khalfan", "Balqees"," Hussain" };
-        List<string> ticketNumbers= new List<string>() {"TKT001", "TKT002", "TKT003", "TKT004"," TKT005" };
-        string[] flightNumbers = new string[]
-           { " OA101 ", "OA106 ", "OA103", "OA108", "OA109", " OA102"};
+        static  List<string> passengerNames = new List<string>(){"Ali", "salwa", "khalfan", "Balqees"," Hussain" };
+        static  List<string> ticketNumbers= new List<string>() {"TKT001", "TKT002", "TKT003", "TKT004"," TKT005" };
+                 string[] flightNumbers = new string[]
+                { " OA101 ", "OA106 ", "OA103", "OA108", "OA109", " OA102"};
 
 
-        List<DateTime> availableDates = new List<DateTime> {
+        static  List<DateTime> availableDates = new List<DateTime> {
 
 
             DateTime.Parse("10-6-2026"),
@@ -19,7 +22,7 @@
             DateTime.Parse("27-6-2026")
         };
 
-        Dictionary<string, string> bookingRecord = new Dictionary<string,string>()
+        static  Dictionary<string, string> bookingRecord = new Dictionary<string,string>()
                 {
                 { "  TKT001 "  ,"OA101|12-Jan-2026"},
                 { "  TKT002 " , "OA101|12-Jan-2026"},
@@ -28,7 +31,7 @@
 
             };
 
-        Queue<string> checkedInQueue = new Queue<string>(
+        static  Queue<string> checkedInQueue = new Queue<string>(
             new string[]
             {" Ali", 
                 "salwa",
@@ -57,17 +60,35 @@
         Queue< string> waitlistQueue=new Queue< string>();
 
 
+       /// Case 01 Register New Passenger
+        public static void RegisterNewPassenger()
+        {
+            Console.WriteLine("Enter your full name");
+            string Name=Console.ReadLine();
 
+            if ( Name.Trim() == "")
+            {
+                Console.WriteLine("CAN NOT BE EMPTY");
+            }
+            if (passengerNames.Contains(Name))
+                Console.WriteLine(" Name alrady exit");
+          
 
+        int nextNumber = ticketNumbers.Count + 1;
 
+        string  tickeId = " TKT" + nextNumber.ToString("000");
 
+            passengerNames.Add(Name);
 
+            ticketNumbers.Add(tickeId);
 
+            Console.WriteLine("Passenger Register Succssfuly ");
+            Console.WriteLine(" Passenger Name" +passengerNames);
+            Console.WriteLine(" Passenger tickID" + tickeId);
 
+        }
 
-
-
-    static void Main(string[] args)
+        static void Main(string[] args)
         {
 
 
@@ -100,7 +121,7 @@
 
                     case 1:
 
-
+                        RegisterNewPassenger();
 
                         break;
 
