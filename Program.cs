@@ -51,30 +51,34 @@ namespace MiniFlightManagementSystem
 
             );
 
-        List<string> cancelledTickets = new List<string>();
+        static List<string> cancelledTickets = new List<string>();
 
 
-        Dictionary<string,string> passengerSeatMap=new Dictionary<string,string>();
+        static  Dictionary<string,string> passengerSeatMap=new Dictionary<string,string>();
 
 
-        Queue< string> waitlistQueue=new Queue< string>();
+        static  Queue< string> waitlistQueue=new Queue< string>();
 
 
        /// Case 01 Register New Passenger
         public static void RegisterNewPassenger()
         {
             Console.WriteLine("Enter your full name");
-            string Name=Console.ReadLine();
+            string Name=Console.ReadLine().ToLower();
 
             if ( Name.Trim() == "")
             {
                 Console.WriteLine("CAN NOT BE EMPTY");
+                return;
             }
-            if (passengerNames.Contains(Name))
-                Console.WriteLine(" Name alrady exit");
-          
 
-        int nextNumber = ticketNumbers.Count + 1;
+     
+            if (passengerNames.Contains(Name))
+            {
+                Console.WriteLine(" Name alrady exit");
+            return;
+            }
+            int nextNumber = ticketNumbers.Count + 1;
 
         string  tickeId = " TKT" + nextNumber.ToString("000");
 
@@ -83,12 +87,54 @@ namespace MiniFlightManagementSystem
             ticketNumbers.Add(tickeId);
 
             Console.WriteLine("Passenger Register Succssfuly ");
-            Console.WriteLine(" Passenger Name" +passengerNames);
-            Console.WriteLine(" Passenger tickID" + tickeId);
+            Console.WriteLine(" Passenger Name"+ ":"   +Name);
+            Console.WriteLine(" Passenger tickID" + ":"  + tickeId);
 
         }
 
-        static void Main(string[] args)
+
+        //Case 02 View All Passengers
+        public static void ViewAllPassengers() {
+            // Check if passengerNames is empty
+            if (passengerNames.Count == 0) 
+            {
+                Console.WriteLine(" No passengers registered yet ");
+               return;
+            }
+
+            // Display a formatted table header
+            Console.WriteLine("| Passenger Name | Ticket ID | Status ");
+
+            // Iterate over passengerNames using a for loop
+
+            cancelledTickets.Add("TKT001");
+            cancelledTickets.Add("TKT002");
+
+
+
+            for (int i = 0; i < passengerNames.Count; i++)
+            {
+                if (cancelledTickets.Contains(ticketNumbers[i]))
+                
+                {
+                    Console.WriteLine((i+ 1)+ " |" + passengerNames[i] +"|"+ ticketNumbers[i]+"| "+ "cancelled");
+                }
+                else
+                {
+                       Console.WriteLine((i+ 1)+ " |" + passengerNames[i] +"|"+ ticketNumbers[i]+"| "+ "active");
+                }
+
+          
+            }
+
+
+            Console.WriteLine(passengerNames.Count);
+
+
+
+            }
+
+            static void Main(string[] args)
         {
 
 
@@ -126,7 +172,7 @@ namespace MiniFlightManagementSystem
                         break;
 
                     case 2:
-
+                        ViewAllPassengers();
 
                         break;
 
