@@ -24,18 +24,19 @@ static void Main(string[] args)
                 Console.WriteLine("------------------------------------");
                 Console.WriteLine("SKY WINGS FLIGHT MANAGEMENT SYSTEM");
                 Console.WriteLine(" ___________________________________");
-                Console.WriteLine("1.  ");
-                Console.WriteLine("2. ");
-                Console.WriteLine("3. ");
-                Console.WriteLine("4. ");
-                Console.WriteLine("5. ");
-                Console.WriteLine("6. ");
-                Console.WriteLine("7.");
-                Console.WriteLine("8. ");
-                Console.WriteLine("9. ");
-                Console.WriteLine("10. ");
+                Console.WriteLine("1.Register New Passenger  ");
+                Console.WriteLine("2.View All Passengers ");
+                Console.WriteLine("3.Book a Flight Ticket ");
+                Console.WriteLine("4.View Booking Details ");
+                Console.WriteLine("5.Update a Booking ");
+                Console.WriteLine("6.Cancel a Ticket ");
+                Console.WriteLine("7.Passenger Check-In");
+                Console.WriteLine("8.Board Passengers (Boarding Stack) ");
+                Console.WriteLine("9.Generate Flight Manifest ");
+                Console.WriteLine("10.Manage Waitlist & Seat Assignment ");
+                Console.WriteLine("0.Exit");
                 Console.WriteLine("------------------------------------");
-
+                Console.WriteLine("Enter your choice: ");
 
                 int choice = int.Parse(Console.ReadLine());
 
@@ -92,6 +93,16 @@ static void Main(string[] args)
                     case 10:
 
                         break;
+
+
+                    case 0:
+
+                        Console.WriteLine("0.EXIT");
+
+                        exit = true;
+
+                        break;
+
 
                     default:
 
