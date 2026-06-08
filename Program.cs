@@ -1,10 +1,4 @@
-﻿using Microsoft.Win32;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.Design;
-using System.Net.Sockets;
-using System.Runtime.Intrinsics.X86;
-using System.Security.Cryptography;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿
 
 namespace MiniFlightManagementSystem
 {
@@ -27,7 +21,7 @@ namespace MiniFlightManagementSystem
             DateTime.Parse("27-6-2026")
         };
 
-        static  Dictionary<string, string> bookingRecord = new Dictionary<string,string>()
+        static Dictionary<string, string> bookingRecord = new Dictionary<string, string>()
                 {
                 { "  TKT001 "  ,"OA101|10-Jan-2026"},
                { "  TKT002 " , "OA106|14-Jan-2026"},
@@ -36,7 +30,7 @@ namespace MiniFlightManagementSystem
 
             };
 
-        static  Queue<string> checkedInQueue = new Queue<string>(
+    static  Queue<string> checkedInQueue = new Queue<string>(
             new string[]
             {" Ali", 
                 "salwa",
@@ -155,7 +149,8 @@ namespace MiniFlightManagementSystem
                 return;
             }
 
-            if (cancelledTickets.Contains(tickeId)){
+            if (cancelledTickets.Contains(tickeId))
+            {
                 Console.WriteLine("ticket is cancelled");
                 return;
             }
@@ -270,7 +265,7 @@ namespace MiniFlightManagementSystem
             }
 
 
-               //Use the Dictionary to retrieve the booking value. If the key does not exist, display 'No booking found for this ticket.' and return
+            //Use the Dictionary to retrieve the booking value. If the key does not exist, display 'No booking found for this ticket.' and return
 
 
 
@@ -288,17 +283,17 @@ namespace MiniFlightManagementSystem
 
 
 
-                // Split the retrieved value on '|' to separate the flight number and date. Display a full booking summary card showing all details.
+            // Split the retrieved value on '|' to separate the flight number and date. Display a full booking summary card showing all details.
 
 
 
-            //}
+        }
 
 
 
 
 
-            static void Main(string[] args)
+        static void Main(string[] args)
         {
 
 
@@ -347,7 +342,7 @@ namespace MiniFlightManagementSystem
 
                     case 4:
 
-                        //ViewBookingDetails();
+                        ViewBookingDetails();
 
                         break;
 
@@ -412,7 +407,7 @@ namespace MiniFlightManagementSystem
 
 
 
-
+            
 
 
 
