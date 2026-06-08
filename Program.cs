@@ -29,7 +29,7 @@ namespace MiniFlightManagementSystem
                 { "  TKT001 "  ,"OA101|10-Jan-2026"},
                 { "  TKT002 " , "OA106|14-Jan-2026"},
                 { "  TKT003  " , "OA103|21-Jan-2026"},
-                 { "  TKT003  " , "OA108|27-Jan-2026"},
+                 { "  TKT004  " , "OA108|27-Jan-2026"},
 
             };
 
@@ -80,9 +80,9 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine(" Name alrady exit");
             return;
             }
-            int nextNumber = ticketNumbers.Count + 1;
+            int nextNumber = ticketNumbers.Count + 1;//to  Auto-generate the ticket ID
 
-        string  tickeId = " TKT" + nextNumber.ToString("000");
+            string  tickeId = " TKT" + nextNumber.ToString("000");
 
             passengerNames.Add(Name);
 
@@ -133,6 +133,9 @@ namespace MiniFlightManagementSystem
             Console.WriteLine(passengerNames.Count);
             }
 
+
+
+
         //case 3 : Book a Flight Ticket
 
         public static void BookFlightTicket()
@@ -140,7 +143,7 @@ namespace MiniFlightManagementSystem
            // Validate it exists in ticketNumbers and is not in cancelledTickets
 
             Console.WriteLine("Enter ticket Id:  ");
-            string ticketID=Console.ReadLine();
+            string ticketID=Console.ReadLine().ToUpper();
 
             if (!ticketNumbers.Contains(ticketID) || cancelledTickets.Contains(ticketID))
             {
@@ -166,16 +169,63 @@ namespace MiniFlightManagementSystem
 
             
                 Console.WriteLine((i+1) +  " :"+flightNumbers[i]);
-            
-            
-
-
-            //select a flight by entering its index number. Validate the input is within range
 
 
 
 
+            //  Prompt the user to select a flight by entering its index number & Validate the input is within range.
+
+            Console.WriteLine(" Enter flight number");
+             int flightindxe =int.Parse(Console.ReadLine());
+
+            if(flightindxe < 1)
+            {
+                Console.WriteLine(" index can not be less than 1");
+                return;
+            }
+            if (flightindxe > flightNumbers.Length)
+            {
+                Console.WriteLine(" index is out of the range");
+                return;
+            }
+            string selectFlight = flightNumbers[flightindxe - 1];
+
+
+
+
+            // Display all available dates from availableDates with index labels & Prompt the user to select a date by index & Validate input.
+
+            for (int i = 0;i <availableDates.Count;i++) 
+            {
+
+                Console.WriteLine(i+1 +  " :"   +availableDates[i]);
+            }
+
+            Console.WriteLine(" Enter  date index");//Prompt the user to select a date
+            int datetindxe = int.Parse(Console.ReadLine());
+
+
+            if (datetindxe < 1 || datetindxe> availableDates.Count)//Validate input
+            {
+                Console.WriteLine(" invalied date");
+            }
+
+            DateTime selectDate= availableDates[datetindxe - 1  ];
+
+            // Store the booking in bookingRecord with the ticket ID as the key and 'FlightNumber|Date' as the value.
+
+            string bookingvalue= selectFlight+ "| " + selectDate.ToString(" d-MMM-yyy");
+
+            bookingRecord.Add( ticketID, bookingvalue );
+
+            // Display a booking confirmation showing ticket ID, passenger name, flight, and date
+            Console.WriteLine(" booking confirmation  ");
+            Console.WriteLine("  ticket ID" + " : "  +ticketID );
+            Console.WriteLine(" passenger name "+  " :" + passengerNames);
+            Console.WriteLine("  flight number " + " :" +selectFlight );
+            Console.WriteLine(" date of travel " +  " +" + selectDate);
         }
+
 
         static void Main(string[] args)
         {
