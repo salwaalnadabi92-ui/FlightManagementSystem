@@ -1,7 +1,10 @@
 ﻿using Microsoft.Win32;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
+using System.Net.Sockets;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MiniFlightManagementSystem
 {
@@ -10,7 +13,7 @@ namespace MiniFlightManagementSystem
         //System Data 
 
         static  List<string> passengerNames = new List<string>(){"Ali", "salwa", "khalfan", "Balqees"," Hussain" };
-        static  List<string> ticketNumbers= new List<string>() {"TKT001", "TKT002", "TKT003", "TKT004"," TKT005" };
+        static  List<string> ticketNumbers= new List<string>() {" TKT001 ","TKT002", "TKT003", "TKT004"," TKT005" };
               static   string[] flightNumbers = new string[]
                 { " OA101 ", "OA106 ", "OA103", "OA108", "OA109", " OA102"};
 
@@ -27,7 +30,7 @@ namespace MiniFlightManagementSystem
         static  Dictionary<string, string> bookingRecord = new Dictionary<string,string>()
                 {
                 { "  TKT001 "  ,"OA101|10-Jan-2026"},
-                { "  TKT002 " , "OA106|14-Jan-2026"},
+               { "  TKT002 " , "OA106|14-Jan-2026"},
                 { "  TKT003  " , "OA103|21-Jan-2026"},
                  { "  TKT004  " , "OA108|27-Jan-2026"},
 
@@ -53,10 +56,11 @@ namespace MiniFlightManagementSystem
 
             );
 
-        static List<string> cancelledTickets = new List<string>();
+        static List<string> cancelledTickets = new List<string>() {"TKT002" };
+  
 
 
-        static  Dictionary<string,string> passengerSeatMap=new Dictionary<string,string>();
+        static Dictionary<string,string> passengerSeatMap=new Dictionary<string,string>();
 
 
         static  Queue< string> waitlistQueue=new Queue< string>();
@@ -105,14 +109,14 @@ namespace MiniFlightManagementSystem
             }
 
             // Display a formatted table header
-            Console.WriteLine("| Passenger Name | Ticket ID | Status ");
+            Console.WriteLine("| Passenger Name    |     Ticket ID    | Status ");
+
+
+
+            //cancelledTickets.Add("TKT001");
+            //cancelledTickets.Add("TKT002");
 
             // Iterate over passengerNames using a for loop
-
-            cancelledTickets.Add("TKT001");
-            cancelledTickets.Add("TKT002");
-
-
 
             for (int i = 0; i < passengerNames.Count; i++)
             {
@@ -143,19 +147,23 @@ namespace MiniFlightManagementSystem
            // Validate it exists in ticketNumbers and is not in cancelledTickets
 
             Console.WriteLine("Enter ticket Id:  ");
-            string ticketID=Console.ReadLine().ToUpper();
+            string tickeId = Console.ReadLine().ToUpper();
 
-            if (!ticketNumbers.Contains(ticketID) || cancelledTickets.Contains(ticketID))
+            if (!ticketNumbers.Contains(tickeId))
             {
                 Console.WriteLine(" invalid ticket id ");
                 return;
             }
-            
+
+            if (cancelledTickets.Contains(tickeId)){
+                Console.WriteLine("ticket is cancelled");
+                return;
+            }
      
 
             //Check if the ticket is already in bookingRecord
 
-            if(bookingRecord.ContainsKey(ticketID))
+            if (bookingRecord.ContainsKey(tickeId))
             {
                 Console.WriteLine(" This ticket already has a booking");
                 return;
@@ -178,7 +186,7 @@ namespace MiniFlightManagementSystem
             Console.WriteLine(" Enter flight number");
              int flightindxe =int.Parse(Console.ReadLine());
 
-            if(flightindxe < 1)
+            if(flightindxe < 1)//Validate input
             {
                 Console.WriteLine(" index can not be less than 1");
                 return;
@@ -188,7 +196,7 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine(" index is out of the range");
                 return;
             }
-            string selectFlight = flightNumbers[flightindxe - 1];
+            string selectFlight = flightNumbers[flightindxe - 1];/////
 
 
 
@@ -210,24 +218,87 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine(" invalied date");
             }
 
-            DateTime selectDate= availableDates[datetindxe - 1  ];
+            DateTime selectDate= availableDates[datetindxe - 1  ];/////
+
+
 
             // Store the booking in bookingRecord with the ticket ID as the key and 'FlightNumber|Date' as the value.
 
-            string bookingvalue= selectFlight+ "| " + selectDate.ToString(" d-MMM-yyy");
+            //string bookingvalue = selectFlight + "| " + selectDate.ToString(" d-MMM-yyy");
 
-            bookingRecord.Add( ticketID, bookingvalue );
+            bookingRecord.Add(tickeId, selectFlight + "| " + selectDate);
+
+            int indexname = ticketNumbers.IndexOf(tickeId);//located value(tickeid) inside the  list
+            string PassName = passengerNames[indexname];
 
             // Display a booking confirmation showing ticket ID, passenger name, flight, and date
             Console.WriteLine(" booking confirmation  ");
-            Console.WriteLine("  ticket ID" + " : "  +ticketID );
-            Console.WriteLine(" passenger name "+  " :" + passengerNames);
+            Console.WriteLine("  ticket ID" + " : " + tickeId);
+            Console.WriteLine(" passenger name " + " :" + PassName);
             Console.WriteLine("  flight number " + " :" +selectFlight );
-            Console.WriteLine(" date of travel " +  " +" + selectDate);
+            Console.WriteLine(" date of travel " +  " :" + selectDate);
         }
 
 
-        static void Main(string[] args)
+        // case 4: View Booking Details
+
+        public static void ViewBookingDetails()
+        {
+
+            // Prompt for a ticket ID.Validate it exists in ticketNumbers.Display an error and return if not found.
+            Console.WriteLine(" Enter ticket id");
+            string ticketId = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticketId))
+
+            {
+                Console.WriteLine("ticket not found ");
+
+                return;
+            }
+
+            // Retrieve the passenger name from passengerNames using the matching index from ticketNumbers.
+
+            int index = ticketNumbers.IndexOf(ticketId);//located value(tickeid) inside the  list
+            string passengerName = passengerNames[index];
+
+            //// Check if the ticket is in cancelledTickets.If so, display 'This ticket has been cancelled.' and return
+            if (cancelledTickets.Contains(ticketId))
+            {
+                Console.WriteLine("This ticket has been cancelled ");
+                return;
+            }
+
+
+               //Use the Dictionary to retrieve the booking value. If the key does not exist, display 'No booking found for this ticket.' and return
+
+
+
+            //   if(!bookingRecord.ContainsKey(ticketId)) {
+
+            //        {
+            //            Console.WriteLine("No booking found for this ticket");
+            //            return;
+            //        }
+            //    }
+
+            //    string bookingIfo = bookingRecord[ticketId];
+
+
+
+
+
+                // Split the retrieved value on '|' to separate the flight number and date. Display a full booking summary card showing all details.
+
+
+
+            //}
+
+
+
+
+
+            static void Main(string[] args)
         {
 
 
@@ -276,7 +347,7 @@ namespace MiniFlightManagementSystem
 
                     case 4:
 
-
+                        //ViewBookingDetails();
 
                         break;
 
