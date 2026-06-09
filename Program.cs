@@ -411,9 +411,87 @@ namespace MiniFlightManagementSystem
 
         }
 
+        //case 6: cancel tikcet
+
+        public static void CancelTicket()
+
+        {
+            Console.Write("Enter Ticket ID: ");
+            string ticketId = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket not found");
+                return;
+            }
+
+            int index = ticketNumbers.IndexOf(ticketId);
+
+            string passengerName = passengerNames[index];
+            //deleted booking from dictioary
+            if (bookingRecord.ContainsKey(ticketId))
+            {
+                string booking = bookingRecord[ticketId];
+
+                Console.WriteLine("Removed Booking: " + booking);
+
+                bookingRecord.Remove(ticketId);
+            }
+            //add to cancllticket
+            cancelledTickets.Add(ticketId);
+
+            //to remove passenger from queqe
+
+            Queue<string> tempQueue = new Queue<string>();
+
+            while (checkedInQueue.Count > 0)
+            {
+                string passenger =
+                    checkedInQueue.Dequeue();
+
+                if (passenger != passengerName)
+                {
+                    tempQueue.Enqueue(passenger);
+                }
+            }
 
 
+            while (tempQueue.Count > 0)
+            {
+                checkedInQueue.Enqueue(
+                    tempQueue.Dequeue());
+            }
 
+            //remove passenger from stack
+            Stack<string> tempStack =
+             new Stack<string>();
+
+            while (boardingStack.Count > 0)
+            {
+                string passenger =
+                    boardingStack.Pop();
+
+                if (passenger != passengerName)
+                {
+                    tempStack.Push(passenger);
+                }
+            }
+
+            // back orginal stack
+
+            while (tempStack.Count > 0)
+            {
+                boardingStack.Push(
+                    tempStack.Pop());
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Cancellation Completed");
+            Console.WriteLine("Ticket ID: " + ticketId);
+            Console.WriteLine("Passenger: " + passengerName);
+
+
+        }
 
 static void Main(string[] args)
         {
@@ -475,7 +553,7 @@ static void Main(string[] args)
 
                     case 6:
 
-
+                     CancelTicket();
 
                         break;
 
