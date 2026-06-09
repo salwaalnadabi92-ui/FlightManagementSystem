@@ -288,12 +288,134 @@ namespace MiniFlightManagementSystem
 
 
         }
+        //case 5:
+        public static void updateBooking()
+        {
+            
+            Console.Write("Enter Ticket ID: ");
+            string ticketId = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket not found");
+                return;
+            }
+
+            if (cancelledTickets.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket is cancelled");
+                return;
+            }
+
+            if (!bookingRecord.ContainsKey(ticketId))
+            {
+                Console.WriteLine("No booking found");
+                return;
+            
+            }
+            //  display current booking
+            string booking = bookingRecord[ticketId];
+
+            string[] parts = booking.Split('|');
+
+            string currentFlight = parts[0];
+            string currentDate = parts[1];
+
+            Console.WriteLine("Current Flight: " + currentFlight);
+            Console.WriteLine("Current Date: " + currentDate);
+
+            //
+            Console.WriteLine("1. Change Flight");
+            Console.WriteLine("2. Change Date");
+            Console.WriteLine("3. Change Both");
+            Console.WriteLine("0. Cancel");
+
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            string newFlight = currentFlight;
+            string newDate = currentDate;
+
+            if (choice == 1)
+            {
+                for (int i = 0; i < flightNumbers.Length; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + flightNumbers[i]);
+                }
+
+                int flightChoice =
+                    Convert.ToInt32(Console.ReadLine());
+
+                newFlight =
+                    flightNumbers[flightChoice - 1];
+            }
+            else if (choice == 2)
+            {
+                for (int i = 0; i < availableDates.Count; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + availableDates[i]);
+                }
+
+                int dateChoice = Convert.ToInt32(Console.ReadLine());
+
+                newDate = availableDates[dateChoice - 1].ToString();
+            }
+
+            else if (choice == 3)
+            {
+                Console.WriteLine("Flights:");
+
+                for (int i = 0; i < flightNumbers.Length; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + flightNumbers[i]);
+                }
+
+                int flightChoice =
+                    Convert.ToInt32(Console.ReadLine());
+
+                newFlight =
+                    flightNumbers[flightChoice - 1];
+
+                Console.WriteLine("Dates:");
+
+                for (int i = 0; i < availableDates.Count; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + availableDates[i]);
+                }
+
+                int dateChoice =
+                    Convert.ToInt32(Console.ReadLine());
+
+                newDate =
+                    availableDates[dateChoice - 1].ToString();
+            }
+            else if (choice == 0)
+            {
+                return;
+            }
+            // update dictionary & new value
+            string updatedBooking =newFlight + "|" + newDate;
+
+            bookingRecord[ticketId] =
+                updatedBooking;
+            //display old and new
+            Console.WriteLine("Old Booking");
+            Console.WriteLine("Flight: " + currentFlight);
+            Console.WriteLine("Date: " + currentDate);
+
+            Console.WriteLine();
+
+            Console.WriteLine("New Booking");
+            Console.WriteLine("Flight: " + newFlight);
+            Console.WriteLine("Date: " + newDate);
+            Console.WriteLine("Booking updated successfully");
+
+        }
 
 
 
 
 
-        static void Main(string[] args)
+static void Main(string[] args)
         {
 
 
@@ -347,7 +469,7 @@ namespace MiniFlightManagementSystem
                         break;
 
                     case 5:
-
+                        updateBooking();
 
                         break;
 
