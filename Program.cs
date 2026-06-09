@@ -493,6 +493,83 @@ namespace MiniFlightManagementSystem
 
         }
 
+        //case 7:
+
+        public static void passengerCheck_In()
+
+            {
+
+            Console.WriteLine("1. Check In Passenger");
+            Console.WriteLine("2. View Check-In Queue");
+            Console.WriteLine("3. Process Next Passenger");
+            Console.WriteLine("0. Back");
+
+            string choice = Console.ReadLine();
+
+
+            string ticketId = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket not found");
+                return;
+            }
+
+            if (cancelledTickets.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket cancelled");
+                return;
+            }
+
+            if (!bookingRecord.ContainsKey(ticketId))
+            {
+                Console.WriteLine("No booking found");
+                return;
+            }
+
+            string booking = bookingRecord[ticketId];
+
+            string[] data = booking.Split('|');
+
+            string passengerName = data[2];
+
+
+            if (checkedInQueue.Contains(passengerName))
+            {
+                Console.WriteLine("Passenger already checked in");
+                return;
+            }
+
+            if (checkedInQueue.Count < 10)
+            {
+                checkedInQueue.Enqueue(passengerName);
+
+                Console.WriteLine("Passenger checked in successfully");
+            }
+
+            
+            else
+            {
+                waitlistQueue.Enqueue(passengerName);
+
+                Console.WriteLine("Added to waitlist");
+            }
+
+
+            int position = 1;
+
+            foreach (string passenger in checkedInQueue)
+            {
+                Console.WriteLine($"{position}. {passenger}");
+                position++;
+            }
+
+            Console.WriteLine("Waitlist Count: " + waitlistQueue.Count);
+
+
+        }
+
+
 static void Main(string[] args)
         {
 
