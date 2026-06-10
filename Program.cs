@@ -1,9 +1,34 @@
-﻿
+﻿using System.IO;
 
 namespace MiniFlightManagementSystem
 {
     internal class Program
+
     {
+
+        static String passengerfile = " passengers.txt";
+
+
+        public static void savepassenger()//save function
+        {
+            File.WriteAllLines(
+              passengerfile,
+              passengerNames
+
+                );
+        }
+
+
+
+        public static void Loadpassenger()// load function
+        {
+            if ( File.Exists( passengerfile ))
+            {
+                passengerNames=File.ReadAllLines( passengerfile ).ToList();
+            }
+
+        }
+
         //System Data 
 
         static  List<string> passengerNames = new List<string>(){"Ali", "salwa", "khalfan", "Balqees"," Hussain" };
@@ -72,13 +97,23 @@ namespace MiniFlightManagementSystem
                 return;
             }
 
-     
-            if (passengerNames.Contains(Name))
+
+            //( if (passengerNames.Contains(Name))
+            // {
+            //     Console.WriteLine(" Name alrady exit");
+            // return;
+            // })
+            if (passengerNames.Any(p  => p == Name))
             {
-                Console.WriteLine(" Name alrady exit");
-            return;
+                Console.WriteLine("Name already exists");
+                return;
             }
+
+
+
             passengerNames.Add(Name);
+
+               savepassenger();
             int nextNumber = ticketNumbers.Count + 1;//to  Auto-generate the ticket ID
 
             string  tickeId = " TKT" + nextNumber.ToString("000");
@@ -214,7 +249,7 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine(" invalied date");
             }
 
-            DateTime selectDate= availableDates[datetindxe - 1  ];/////
+            DateTime selectDate= availableDates[datetindxe - 1  ];
 
 
 
@@ -223,10 +258,10 @@ namespace MiniFlightManagementSystem
             //string bookingvalue = selectFlight + "| " + selectDate.ToString(" d-MMM-yyy");
 
             bookingRecord.Add(tickeId, selectFlight + "| " + selectDate);
-
+            
             int indexname = ticketNumbers.IndexOf(tickeId);//located value(tickeid) inside the  list
             string passName = passengerNames[indexname];
-
+           
             // Display a booking confirmation showing ticket ID, passenger name, flight, and date
             Console.WriteLine(" booking confirmation  ");
             Console.WriteLine("  ticket ID" + " : " + tickeId);
@@ -414,8 +449,9 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("Date: " + currentDate);
 
             Console.WriteLine();
-
+            Console.WriteLine("----------------------------");
             Console.WriteLine("New Booking");
+            Console.WriteLine("----------------------------");
             Console.WriteLine("Flight: " + newFlight);
             Console.WriteLine("Date: " + newDate);
             Console.WriteLine("Booking updated successfully");
@@ -504,7 +540,7 @@ namespace MiniFlightManagementSystem
 
         }
 
-        //case 7:
+        //case 7: Passenger Check-In
 
         public static void passengerCheck_In()
 
@@ -581,9 +617,23 @@ namespace MiniFlightManagementSystem
         }
 
 
-static void Main(string[] args)
-        {
 
+        //case :8  BoardPassengers
+        public static void BoardPassengers()
+        {
+            Console.WriteLine(" 1-Load boarding stack from check-in queue");
+            Console.WriteLine("2-Board next passenger");
+            Console.WriteLine("3-View boarding stack  ");
+            Console.WriteLine("4-View boarding log ");
+            Console.WriteLine("0.Back");
+
+
+
+
+        }
+        static void Main(string[] args)
+        {
+            Loadpassenger();
 
             bool exit = false;
 
@@ -616,6 +666,7 @@ static void Main(string[] args)
 
                         RegisterNewPassenger();
 
+
                         break;
 
                     case 2:
@@ -647,11 +698,13 @@ static void Main(string[] args)
 
                     case 7:
 
-
+                        passengerCheck_In();
 
 
                         break;
                     case 8:
+
+                        BoardPassengers();
 
                         break;
 
