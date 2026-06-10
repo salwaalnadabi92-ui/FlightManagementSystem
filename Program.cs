@@ -286,11 +286,17 @@ namespace MiniFlightManagementSystem
 
             // Split the retrieved value on '|' to separate the flight number and date. Display a full booking summary card showing all details.
 
+            string bookingValue = bookingRecord[ticketId];
 
+            string[]  bookingDate=bookingValue.Split('|');
+            string flightNumber=bookingDate[0];
+            string flightDate = bookingDate[1];
 
-
-
-
+            // Display a full booking summary card showing all details.
+            Console.WriteLine(" ticket id" + ticketId);
+            Console.WriteLine(" flight number " +flightNumber);
+            Console.WriteLine(" Booking summary"+ flightDate);
+            
         }
         //case 5:
         public static void updateBooking()
