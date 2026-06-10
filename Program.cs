@@ -269,21 +269,25 @@ namespace MiniFlightManagementSystem
 
 
 
-            //   if(!bookingRecord.ContainsKey(ticketId)) {
+            if (!bookingRecord.ContainsKey(ticketId))
+            {
 
-            //        {
-            //            Console.WriteLine("No booking found for this ticket");
-            //            return;
-            //        }
-            //    }
+                {
+                    Console.WriteLine("No booking found for this ticket");
+                    return;
+                }
+            }
 
-            //    string bookingIfo = bookingRecord[ticketId];
+            string bookingIfo = bookingRecord[ticketId];
 
 
 
 
 
             // Split the retrieved value on '|' to separate the flight number and date. Display a full booking summary card showing all details.
+
+
+
 
 
 
