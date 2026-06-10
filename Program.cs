@@ -292,12 +292,289 @@ namespace MiniFlightManagementSystem
 
 
         }
+        //case 5:
+        public static void updateBooking()
+        {
+            
+            Console.Write("Enter Ticket ID: ");
+            string ticketId = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket not found");
+                return;
+            }
+
+            if (cancelledTickets.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket is cancelled");
+                return;
+            }
+
+            if (!bookingRecord.ContainsKey(ticketId))
+            {
+                Console.WriteLine("No booking found");
+                return;
+            
+            }
+            //  display current booking
+            string booking = bookingRecord[ticketId];
+
+            string[] parts = booking.Split('|');
+
+            string currentFlight = parts[0];
+            string currentDate = parts[1];
+
+            Console.WriteLine("Current Flight: " + currentFlight);
+            Console.WriteLine("Current Date: " + currentDate);
+
+            //
+            Console.WriteLine("1. Change Flight");
+            Console.WriteLine("2. Change Date");
+            Console.WriteLine("3. Change Both");
+            Console.WriteLine("0. Cancel");
+
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            string newFlight = currentFlight;
+            string newDate = currentDate;
+
+            if (choice == 1)
+            {
+                for (int i = 0; i < flightNumbers.Length; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + flightNumbers[i]);
+                }
+
+                int flightChoice =
+                    Convert.ToInt32(Console.ReadLine());
+
+                newFlight =
+                    flightNumbers[flightChoice - 1];
+            }
+            else if (choice == 2)
+            {
+                for (int i = 0; i < availableDates.Count; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + availableDates[i]);
+                }
+
+                int dateChoice = Convert.ToInt32(Console.ReadLine());
+
+                newDate = availableDates[dateChoice - 1].ToString();
+            }
+
+            else if (choice == 3)
+            {
+                Console.WriteLine("Flights:");
+
+                for (int i = 0; i < flightNumbers.Length; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + flightNumbers[i]);
+                }
+
+                int flightChoice =
+                    Convert.ToInt32(Console.ReadLine());
+
+                newFlight =
+                    flightNumbers[flightChoice - 1];
+
+                Console.WriteLine("Dates:");
+
+                for (int i = 0; i < availableDates.Count; i++)
+                {
+                    Console.WriteLine((i + 1) + ". " + availableDates[i]);
+                }
+
+                int dateChoice =
+                    Convert.ToInt32(Console.ReadLine());
+
+                newDate =
+                    availableDates[dateChoice - 1].ToString();
+            }
+            else if (choice == 0)
+            {
+                return;
+            }
+            // update dictionary & new value
+            string updatedBooking =newFlight + "|" + newDate;
+
+            bookingRecord[ticketId] =
+                updatedBooking;
+            //display old and new
+            Console.WriteLine("Old Booking");
+            Console.WriteLine("Flight: " + currentFlight);
+            Console.WriteLine("Date: " + currentDate);
+
+            Console.WriteLine();
+
+            Console.WriteLine("New Booking");
+            Console.WriteLine("Flight: " + newFlight);
+            Console.WriteLine("Date: " + newDate);
+            Console.WriteLine("Booking updated successfully");
+
+        }
+
+        //case 6: cancel tikcet
+
+        public static void CancelTicket()
+
+        {
+            Console.Write("Enter Ticket ID: ");
+            string ticketId = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket not found");
+                return;
+            }
+
+            int index = ticketNumbers.IndexOf(ticketId);
+
+            string passengerName = passengerNames[index];
+            //deleted booking from dictioary
+            if (bookingRecord.ContainsKey(ticketId))
+            {
+                string booking = bookingRecord[ticketId];
+
+                Console.WriteLine("Removed Booking: " + booking);
+
+                bookingRecord.Remove(ticketId);
+            }
+            //add to cancllticket
+            cancelledTickets.Add(ticketId);
+
+            //to remove passenger from queqe
+
+            Queue<string> tempQueue = new Queue<string>();
+
+            while (checkedInQueue.Count > 0)
+            {
+                string passenger =
+                    checkedInQueue.Dequeue();
+
+                if (passenger != passengerName)
+                {
+                    tempQueue.Enqueue(passenger);
+                }
+            }
 
 
+            while (tempQueue.Count > 0)
+            {
+                checkedInQueue.Enqueue(
+                    tempQueue.Dequeue());
+            }
+
+            //remove passenger from stack
+            Stack<string> tempStack =
+             new Stack<string>();
+
+            while (boardingStack.Count > 0)
+            {
+                string passenger =
+                    boardingStack.Pop();
+
+                if (passenger != passengerName)
+                {
+                    tempStack.Push(passenger);
+                }
+            }
+
+            // back orginal stack
+
+            while (tempStack.Count > 0)
+            {
+                boardingStack.Push(
+                    tempStack.Pop());
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Cancellation Completed");
+            Console.WriteLine("Ticket ID: " + ticketId);
+            Console.WriteLine("Passenger: " + passengerName);
 
 
+        }
 
-        static void Main(string[] args)
+        //case 7:
+
+        public static void passengerCheck_In()
+
+            {
+
+            Console.WriteLine("1. Check In Passenger");
+            Console.WriteLine("2. View Check-In Queue");
+            Console.WriteLine("3. Process Next Passenger");
+            Console.WriteLine("0. Back");
+
+            string choice = Console.ReadLine();
+
+
+            string ticketId = Console.ReadLine();
+
+            if (!ticketNumbers.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket not found");
+                return;
+            }
+
+            if (cancelledTickets.Contains(ticketId))
+            {
+                Console.WriteLine("Ticket cancelled");
+                return;
+            }
+
+            if (!bookingRecord.ContainsKey(ticketId))
+            {
+                Console.WriteLine("No booking found");
+                return;
+            }
+
+            string booking = bookingRecord[ticketId];
+
+            string[] data = booking.Split('|');
+
+            string passengerName = data[2];
+
+
+            if (checkedInQueue.Contains(passengerName))
+            {
+                Console.WriteLine("Passenger already checked in");
+                return;
+            }
+
+            if (checkedInQueue.Count < 10)
+            {
+                checkedInQueue.Enqueue(passengerName);
+
+                Console.WriteLine("Passenger checked in successfully");
+            }
+
+            
+            else
+            {
+                waitlistQueue.Enqueue(passengerName);
+
+                Console.WriteLine("Added to waitlist");
+            }
+
+
+            int position = 1;
+
+            foreach (string passenger in checkedInQueue)
+            {
+                Console.WriteLine($"{position}. {passenger}");
+                position++;
+            }
+
+            Console.WriteLine("Waitlist Count: " + waitlistQueue.Count);
+
+
+        }
+
+
+static void Main(string[] args)
         {
 
 
@@ -351,13 +628,13 @@ namespace MiniFlightManagementSystem
                         break;
 
                     case 5:
-
+                        updateBooking();
 
                         break;
 
                     case 6:
 
-
+                     CancelTicket();
 
                         break;
 
