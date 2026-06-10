@@ -21,14 +21,14 @@ namespace MiniFlightManagementSystem
             DateTime.Parse("27-6-2026")
         };
 
-        static Dictionary<string, string> bookingRecord = new Dictionary<string, string>()
-                {
-                { "  TKT001 "  ,"OA101|10-Jan-2026"},
-               { "  TKT002 " , "OA106|14-Jan-2026"},
-                { "  TKT003  " , "OA103|21-Jan-2026"},
-                 { "  TKT004  " , "OA108|27-Jan-2026"},
+        static Dictionary<string, string> bookingRecord = new Dictionary<string, string>();
+            //    {
+            //    { "  TKT001 "  ,"OA101|10-Jan-2026"},
+            //   { "  TKT002 " , "OA106|14-Jan-2026"},
+            //    { "  TKT003  " , "OA103|21-Jan-2026"},
+            //     { "  TKT004  " , "OA108|27-Jan-2026"},
 
-            };
+            //};
 
     static  Queue<string> checkedInQueue = new Queue<string>(
             new string[]
@@ -78,11 +78,12 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine(" Name alrady exit");
             return;
             }
+            passengerNames.Add(Name);
             int nextNumber = ticketNumbers.Count + 1;//to  Auto-generate the ticket ID
 
             string  tickeId = " TKT" + nextNumber.ToString("000");
 
-            passengerNames.Add(Name);
+           
 
             ticketNumbers.Add(tickeId);
 
@@ -143,7 +144,7 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("Enter ticket Id:  ");
             string tickeId = Console.ReadLine().ToUpper();
 
-            if (!ticketNumbers.Contains(tickeId))
+            if (ticketNumbers.Contains(tickeId))
             {
                 Console.WriteLine(" invalid ticket id ");
                 return;
@@ -204,7 +205,7 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine(i+1 +  " :"   +availableDates[i]);
             }
 
-            Console.WriteLine(" Enter  date index");//Prompt the user to select a date
+            Console.WriteLine(" Enter  date flight");//Prompt the user to select a date
             int datetindxe = int.Parse(Console.ReadLine());
 
 
@@ -224,12 +225,12 @@ namespace MiniFlightManagementSystem
             bookingRecord.Add(tickeId, selectFlight + "| " + selectDate);
 
             int indexname = ticketNumbers.IndexOf(tickeId);//located value(tickeid) inside the  list
-            string PassName = passengerNames[indexname];
+            string passName = passengerNames[indexname];
 
             // Display a booking confirmation showing ticket ID, passenger name, flight, and date
             Console.WriteLine(" booking confirmation  ");
             Console.WriteLine("  ticket ID" + " : " + tickeId);
-            Console.WriteLine(" passenger name " + " :" + PassName);
+            Console.WriteLine(" passenger name " + " :" + passName);
             Console.WriteLine("  flight number " + " :" +selectFlight );
             Console.WriteLine(" date of travel " +  " :" + selectDate);
         }
@@ -284,7 +285,7 @@ namespace MiniFlightManagementSystem
 
 
 
-            // Split the retrieved value on '|' to separate the flight number and date. Display a full booking summary card showing all details.
+            // Split the retrieved value on '|' to separate the flight number and date
 
             string bookingValue = bookingRecord[ticketId];
 
