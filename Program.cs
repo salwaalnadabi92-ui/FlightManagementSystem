@@ -1,43 +1,18 @@
 ﻿using System.IO;
-
+using System.Collections.Generic;
 namespace MiniFlightManagementSystem
 {
     internal class Program
 
     {
-
-        static String passengerfile = " passengers.txt";
-
-
-        public static void savepassenger()//save function
-        {
-            File.WriteAllLines(
-              passengerfile,
-              passengerNames
-
-                );
-        }
-
-
-
-        public static void Loadpassenger()// load function
-        {
-            if ( File.Exists( passengerfile ))
-            {
-                passengerNames=File.ReadAllLines( passengerfile ).ToList();
-            }
-
-        }
-
         //System Data 
 
-        static  List<string> passengerNames = new List<string>(){"Ali", "salwa", "khalfan", "Balqees"," Hussain" };
-        static  List<string> ticketNumbers= new List<string>() {" TKT001 ","TKT002", "TKT003", "TKT004"," TKT005" };
-              static   string[] flightNumbers = new string[]
-                { " OA101 ", "OA106 ", "OA103", "OA108", "OA109", " OA102"};
+        static List<string> passengerNames = new List<string>() { "Ali", "salwa", "khalfan", "Balqees", " Hussain" };
+        static List<string> ticketNumbers = new List<string>() { "TKT001", "TKT002", "TKT003", "TKT004", "TKT005" };
+        static string[] flightNumbers = { " OA101 ", "OA106 ", "OA103", "OA108", "OA109", " OA102"};
 
 
-        static  List<DateTime> availableDates = new List<DateTime> {
+        static List<DateTime> availableDates = new List<DateTime> {
 
 
             DateTime.Parse("10-6-2026"),
@@ -47,25 +22,25 @@ namespace MiniFlightManagementSystem
         };
 
         static Dictionary<string, string> bookingRecord = new Dictionary<string, string>();
-            //    {
-            //    { "  TKT001 "  ,"OA101|10-Jan-2026"},
-            //   { "  TKT002 " , "OA106|14-Jan-2026"},
-            //    { "  TKT003  " , "OA103|21-Jan-2026"},
-            //     { "  TKT004  " , "OA108|27-Jan-2026"},
+        //    {
+        //    { "  TKT001 "  ,"OA101|10-Jan-2026"},
+        //   { "  TKT002 " , "OA106|14-Jan-2026"},
+        //    { "  TKT003  " , "OA103|21-Jan-2026"},
+        //     { "  TKT004  " , "OA108|27-Jan-2026"},
 
-            //};
+        //};
 
-    static  Queue<string> checkedInQueue = new Queue<string>(
-            new string[]
-            {" Ali", 
+        static Queue<string> checkedInQueue = new Queue<string>(
+                new string[]
+                {" Ali",
                 "salwa",
                 "khalfan"
-            }
+                }
 
-            );
+                );
 
 
-        static Stack<string> boardingStack = new Stack<string >(
+        static Stack<string> boardingStack = new Stack<string>(
 
               new string[]
             {   " Ali",
@@ -75,56 +50,89 @@ namespace MiniFlightManagementSystem
 
             );
 
-        static List<string> cancelledTickets = new List<string>() {"TKT002" };
-  
+        static List<string> cancelledTickets = new List<string>() { "TKT002" };
 
 
-        static Dictionary<string,string> passengerSeatMap=new Dictionary<string,string>();
+
+        static Dictionary<string, string> passengerSeatMap = new Dictionary<string, string>();
 
 
-        static  Queue< string> waitlistQueue=new Queue< string>();
+        static Queue<string> waitlistQueue = new Queue<string>();
+
+        static String passengerfile = " passengers.txt";
 
 
-       /// Case 01 Register New Passenger
+        static string tickeID = "";
+
+        //public static void savepassenger()//save function
+        //{
+        //    File.WriteAllLines(
+        //      passengerfile,
+        //      passengerNames
+
+        //        );
+
+        //    Console.WriteLine(Path.GetFullPath(passengerfile));
+        //}
+
+
+
+        //public static void Loadpassenger()// load function
+        //{
+        //    if ( File.Exists( passengerfile ))
+        //    {
+        //        passengerNames=File.ReadAllLines( passengerfile ).ToList();
+        //    }
+
+        //}
+
+
+
+
+        /// Case 01 Register New Passenger
         public static void RegisterNewPassenger()
         {
             Console.WriteLine("Enter your full name");
             string Name=Console.ReadLine().ToLower();
 
-            if ( Name.Trim() == "")
+            if ( Name == "")
             {
                 Console.WriteLine("CAN NOT BE EMPTY");
                 return;
             }
 
-
-            //( if (passengerNames.Contains(Name))
-            // {
-            //     Console.WriteLine(" Name alrady exit");
-            // return;
-            // })
-            if (passengerNames.Any(p  => p == Name))
+            for (int i = 0; i < passengerSeatMap.Count; i++)
             {
-                Console.WriteLine("Name already exists");
-                return;
+                if (passengerNames[i].ToLower() == Name.ToLower())
+                {
+                    Console.WriteLine(" Name alrady exit");
+                    return;
+                }
             }
+
+            //if (passengerNames.Any(p  => p == Name))
+            //{
+            //    Console.WriteLine("Name already exists");
+            //    return;
+            //}
 
 
 
             passengerNames.Add(Name);
-
-               savepassenger();
-            int nextNumber = ticketNumbers.Count + 1;//to  Auto-generate the ticket ID
-
-            string  tickeId = " TKT" + nextNumber.ToString("000");
-
            
 
-            ticketNumbers.Add(tickeId);
 
+            int nextNumber = ticketNumbers.Count + 1;//to  Auto-generate the ticket ID
+
+            tickeID = " TKT" + nextNumber.ToString("D3");
+
+            
+
+            ticketNumbers.Add(tickeID);
+            //savepassenger();
             Console.WriteLine("Passenger Register Succssfuly ");
             Console.WriteLine(" Passenger Name"+ ":"   +Name);
-            Console.WriteLine(" Passenger tickID" + ":"  + tickeId);
+            Console.WriteLine(" Passenger tickID" + ":"  + tickeID);
 
         }
 
@@ -174,27 +182,27 @@ namespace MiniFlightManagementSystem
 
         public static void BookFlightTicket()
         {
-           // Validate it exists in ticketNumbers and is not in cancelledTickets
+            // Validate it exists in ticketNumbers and is not in cancelledTickets
 
             Console.WriteLine("Enter ticket Id:  ");
-            string tickeId = Console.ReadLine().ToUpper();
+            tickeID = Console.ReadLine();
 
-            if (ticketNumbers.Contains(tickeId))
+            if (!ticketNumbers.Contains(tickeID))
             {
                 Console.WriteLine(" invalid ticket id ");
                 return;
             }
 
-            if (cancelledTickets.Contains(tickeId))
+            if (cancelledTickets.Contains(tickeID))
             {
                 Console.WriteLine("ticket is cancelled");
                 return;
             }
-     
+
 
             //Check if the ticket is already in bookingRecord
 
-            if (bookingRecord.ContainsKey(tickeId))
+            if (bookingRecord.ContainsKey(tickeID))
             {
                 Console.WriteLine(" This ticket already has a booking");
                 return;
@@ -204,10 +212,11 @@ namespace MiniFlightManagementSystem
             Console.WriteLine(" Available flights");
 
 
-            for (int i = 0; i <flightNumbers.Length; i++)
+            for (int i = 0; i < flightNumbers.Length; i++)
+            {
+                Console.WriteLine((i + 1) + " :" + flightNumbers[i]);
+            }
 
-            
-                Console.WriteLine((i+1) +  " :"+flightNumbers[i]);
 
 
 
@@ -215,18 +224,14 @@ namespace MiniFlightManagementSystem
             //  Prompt the user to select a flight by entering its index number & Validate the input is within range.
 
             Console.WriteLine(" Enter flight number");
-             int flightindxe =int.Parse(Console.ReadLine());
+            int flightindxe = int.Parse(Console.ReadLine());
 
-            if(flightindxe < 1)//Validate input
+            if (flightindxe < 1 || flightindxe > flightNumbers.Length)//Validate input
             {
-                Console.WriteLine(" index can not be less than 1");
+                Console.WriteLine(" index out of range");
                 return;
             }
-            if (flightindxe > flightNumbers.Length)
-            {
-                Console.WriteLine(" index is out of the range");
-                return;
-            }
+            
             string selectFlight = flightNumbers[flightindxe - 1];/////
 
 
@@ -253,20 +258,17 @@ namespace MiniFlightManagementSystem
 
 
 
-            // Store the booking in bookingRecord with the ticket ID as the key and 'FlightNumber|Date' as the value.
 
-            //string bookingvalue = selectFlight + "| " + selectDate.ToString(" d-MMM-yyy");
 
-            bookingRecord.Add(tickeId, selectFlight + "| " + selectDate);
-            
-            int indexname = ticketNumbers.IndexOf(tickeId);//located value(tickeid) inside the  list
-            string passName = passengerNames[indexname];
-           
+            //int indexname = ticketNumbers.IndexOf(tickeID); //located value(tickeid) inside the  list
+            string Name = passengerNames[ticketNumbers.IndexOf(tickeID)];
+
             // Display a booking confirmation showing ticket ID, passenger name, flight, and date
+
             Console.WriteLine(" booking confirmation  ");
-            Console.WriteLine("  ticket ID" + " : " + tickeId);
-            Console.WriteLine(" passenger name " + " :" + passName);
-            Console.WriteLine("  flight number " + " :" +selectFlight );
+            Console.WriteLine("  ticket ID" + " : " + tickeID);            
+            Console.WriteLine("Passenger Name: " + Name);
+            Console.WriteLine("  flight number " + " :" + selectFlight);
             Console.WriteLine(" date of travel " +  " :" + selectDate);
         }
 
@@ -290,8 +292,8 @@ namespace MiniFlightManagementSystem
 
             // Retrieve the passenger name from passengerNames using the matching index from ticketNumbers.
 
-            int index = ticketNumbers.IndexOf(ticketId);//located value(tickeid) inside the  list
-            string passengerName = passengerNames[index];
+            //int index = ticketNumbers.IndexOf(ticketId);//located value(tickeid) inside the  list
+            //string passengerName = passengerNames[index];
 
             //// Check if the ticket is in cancelledTickets.If so, display 'This ticket has been cancelled.' and return
             if (cancelledTickets.Contains(ticketId))
@@ -633,8 +635,8 @@ namespace MiniFlightManagementSystem
         }
         static void Main(string[] args)
         {
-            Loadpassenger();
-
+            //Loadpassenger();
+                        
             bool exit = false;
 
             while (exit == false)
@@ -670,6 +672,7 @@ namespace MiniFlightManagementSystem
                         break;
 
                     case 2:
+
                         ViewAllPassengers();
 
                         break;
@@ -722,9 +725,8 @@ namespace MiniFlightManagementSystem
 
                         break;
 
-
                     default:
-
+                        Console.WriteLine("thank you");
                         break;
 
                 }//switch
