@@ -1,5 +1,6 @@
-﻿using System.IO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Intrinsics.Arm;
 namespace MiniFlightManagementSystem
 {
     internal class Program
@@ -21,16 +22,16 @@ namespace MiniFlightManagementSystem
             DateTime.Parse("27-6-2026")
         };
 
-        static Dictionary<string, string> bookingRecord = new Dictionary<string, string>();
-        //    {
-        //    { "  TKT001 "  ,"OA101|10-Jan-2026"},
-        //   { "  TKT002 " , "OA106|14-Jan-2026"},
-        //    { "  TKT003  " , "OA103|21-Jan-2026"},
-        //     { "  TKT004  " , "OA108|27-Jan-2026"},
+        static Dictionary<string, string> bookingRecord = new Dictionary<string, string>() { 
+            
+            { "TKT001" ,"OA101|10-Jan-2026"},
+            { "TKT002" ,"OA106|14-Jan-2026"},
+            { "TKT003" ,"OA103|21-Jan-2026"},
+            { "TKT004" ,"OA108|27-Jan-2026"},
 
-        //};
+              };
 
-        static Queue<string> checkedInQueue = new Queue<string>(
+    static Queue<string> checkedInQueue = new Queue<string>(
                 new string[]
                 {" Ali",
                 "salwa",
@@ -59,10 +60,47 @@ namespace MiniFlightManagementSystem
 
         static Queue<string> waitlistQueue = new Queue<string>();
 
-        static String passengerfile = " passengers.txt";
+        static String passengerfile = "passengers.txt";
 
 
         static string tickeID = "";
+
+        public static void SAVEDATA()
+        {
+            List< string > list = new List<string>();
+            for (int i = 0; i < passengerNames.Count; i++)
+            {
+
+                string SAVE = passengerNames[i] + "|" + ticketNumbers[i];
+                list.Add(SAVE);
+            }
+            File.WriteAllLines(passengerfile, list);
+
+        }
+
+        public static void loadFile()
+
+        {
+            if (File.Exists(passengerfile))
+    
+            {
+              string  line = File.ReadAllLines(passengerfile);
+
+                string[] part = line.Split["|"];
+    
+            foreach (int x in line)
+                {
+                    line.Add(part[0]);
+                    line.Add(part[1]);
+
+                       }
+
+
+
+            }
+        }
+       
+
 
         //public static void savepassenger()//save function
         //{
@@ -93,15 +131,15 @@ namespace MiniFlightManagementSystem
         public static void RegisterNewPassenger()
         {
             Console.WriteLine("Enter your full name");
-            string Name=Console.ReadLine().ToLower();
+            string Name = Console.ReadLine().ToLower();
 
-            if ( Name == "")
+            if (Name == "")
             {
                 Console.WriteLine("CAN NOT BE EMPTY");
                 return;
             }
 
-            for (int i = 0; i < passengerSeatMap.Count; i++)
+            for (int i = 0; i < passengerNames.Count; i++)
             {
                 if (passengerNames[i].ToLower() == Name.ToLower())
                 {
@@ -119,21 +157,22 @@ namespace MiniFlightManagementSystem
 
 
             passengerNames.Add(Name);
-           
+
 
 
             int nextNumber = ticketNumbers.Count + 1;//to  Auto-generate the ticket ID
 
             tickeID = " TKT" + nextNumber.ToString("D3");
 
-            
+
 
             ticketNumbers.Add(tickeID);
+
+            SAVEDATA();
             //savepassenger();
             Console.WriteLine("Passenger Register Succssfuly ");
-            Console.WriteLine(" Passenger Name"+ ":"   +Name);
-            Console.WriteLine(" Passenger tickID" + ":"  + tickeID);
-
+            Console.WriteLine(" Passenger Name" + ":" + Name);
+            Console.WriteLine(" Passenger tickID" + ":" + tickeID);
         }
 
 
@@ -317,7 +356,7 @@ namespace MiniFlightManagementSystem
             }
 
             string bookingIfo = bookingRecord[ticketId];
-
+            Console.WriteLine(bookingIfo);
 
 
 
@@ -576,9 +615,9 @@ namespace MiniFlightManagementSystem
                 return;
             }
 
-            string booking = bookingRecord[ticketId];
+            string bookingInfo = bookingRecord[ticketId];
 
-            string[] data = booking.Split('|');
+            string[] data = bookingInfo.Split('|');
 
             string passengerName = data[2];
 
